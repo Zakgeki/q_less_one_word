@@ -14,7 +14,7 @@ fn main() {
     let d10 = [ "k", "v", "f", "g", "p" ];
     let d11 = [ "s", "b", "z", "x", "n", "k" ];
 
-    // let mut out = vec![];
+    let mut out = vec![];
 
     for i00 in 0..d00.len() {
         for i01 in 0..d01.len() {
@@ -54,7 +54,7 @@ fn main() {
         }
     }
 
-    // println!( "{:#?}", out);
+    println!( "{:#?}", out);
 }
 
 
