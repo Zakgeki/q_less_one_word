@@ -3,9 +3,9 @@
 //
 // eventually this will be multithreaded
 
-use std::env;
-use std::fs;
-use std::io::Write;
+// use std::env;
+// use std::fs;
+// use std::io::Write;
 
 // generates permutations form a given vector
 // could be of any type
@@ -50,7 +50,7 @@ fn main() {
     let d10 = [ 'k', 'v', 'f', 'g', 'p' ];
     let d11 = [ 's', 'b', 'z', 'x', 'n', 'k' ];
 
-    let mut file = fs::File::create("out.txt").expect("create failed");
+    // let mut file = fs::File::create("out.txt").expect("create failed");
 
 
     for i00 in 0..d00.len() {
