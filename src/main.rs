@@ -37,18 +37,18 @@ fn gen_perms<T: Clone>(k: usize, arr: &mut Vec<T>, out: &mut Vec<Vec<T>>) {
 }
 
 fn main() {
-    let d00 = [ "h", "r", "n" ];
-    let d01 = [ "a", "e", "o" ];
-    let d02 = [ "y", "b", "l", "m" ];
-    let d03 = [ "h", "t", "p", "w" ];
-    let d04 = [ "i", "n", "y", "o" ];
-    let d05 = [ "l", "g", "d", "r" ];
-    let d06 = [ "c", "m", "t", "s" ];
-    let d07 = [ "c", "b", "d", "j", "t" ];
-    let d08 = [ "a", "e", "i", "o", "u" ];
-    let d09 = [ "d", "f", "r", "l", "w" ];
-    let d10 = [ "k", "v", "f", "g", "p" ];
-    let d11 = [ "s", "b", "z", "x", "n", "k" ];
+    let d00 = [ 'h', 'r', 'n' ];
+    let d01 = [ 'a', 'e', 'o' ];
+    let d02 = [ 'y', 'b', 'l', 'm' ];
+    let d03 = [ 'h', 't', 'p', 'w' ];
+    let d04 = [ 'i', 'n', 'y', 'o' ];
+    let d05 = [ 'l', 'g', 'd', 'r' ];
+    let d06 = [ 'c', 'm', 't', 's' ];
+    let d07 = [ 'c', 'b', 'd', 'j', 't' ];
+    let d08 = [ 'a', 'e', 'i', 'o', 'u' ];
+    let d09 = [ 'd', 'f', 'r', 'l', 'w' ];
+    let d10 = [ 'k', 'v', 'f', 'g', 'p' ];
+    let d11 = [ 's', 'b', 'z', 'x', 'n', 'k' ];
 
     let mut file = fs::File::create("out.txt").expect("create failed");
 
@@ -74,7 +74,7 @@ fn main() {
                                                     // let out = format!("{:?}", permute::permute(dice_start_perm));
                                                     let out = format!("{:?}", gen_unique_perms(dice_start_perm));
                                                     println!("{:?}", out);
-                                                    file.write_all(out.as_bytes()).expect("write failed");
+                                                    // file.write_all(out.as_bytes()).expect("write failed");
                                                     
                                                 }
                                             }
