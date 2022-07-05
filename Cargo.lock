@@ -3,5 +3,14 @@
 version = 3
 
 [[package]]
+name = "permute"
+version = "0.2.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "4fddb8f2cf68c74002bde337a2472e18c870e3464b1f637cc9718f51687e88ca"
+
+[[package]]
 name = "q_less_one_word"
 version = "0.1.0"
+dependencies = [
+ "permute",
+]
