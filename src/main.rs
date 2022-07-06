@@ -7,34 +7,8 @@
 // use std::fs;
 // use std::io::Write;
 
-// generates permutations form a given vector
-// could be of any type
-//
 
-fn gen_unique_perms<T: Clone>( mut arr: Vec<T> ) -> Vec<Vec<T>> {
-    let mut perms = vec![];
-    let k = arr.len();
-    gen_perms(k, &mut arr, &mut perms);
-    perms
-}
-
-fn gen_perms<T: Clone>(k: usize, arr: &mut Vec<T>, out: &mut Vec<Vec<T>>) {
-    if k == 0 {
-        out.push( arr.clone() );
-    } else {
-        gen_perms( k - 1, arr , out);
-
-        for i in 0..k - 1 {
-            if k % 2 == 0 {
-                arr.swap(i, k - 1);
-            } else {
-                arr.swap(0, k - 1 );
-            }
-
-            gen_perms( k - 1, arr, out );
-        }
-    }
-}
+mod permute;
 
 fn main() {
     let d00 = [ 'h', 'r', 'n' ];
@@ -72,7 +46,7 @@ fn main() {
                                                     ];
                                                     // Me trying a crate that has heaps algo already implemented
                                                     // let out = format!("{:?}", permute::permute(dice_start_perm));
-                                                    let out = format!("{:?}", gen_unique_perms(dice_start_perm));
+                                                    let out = format!("{:?}", permute::gen_unique_perms(dice_start_perm));
                                                     println!("{:?}", out);
                                                     // file.write_all(out.as_bytes()).expect("write failed");
                                                     
@@ -89,6 +63,13 @@ fn main() {
         }
     }
 
+    // was testing mem depth
+    // let perms = permute::gen_unique_perms(vec![
+    //     "d00", "d01", "d02", "d03",
+    //     "d04", "d05", "d06", "d07",
+    //     "d08", "d09", "d10", "d11"
+    // ]);
+    // println!("{:?}, length: {}", perms, perms.len());
     println!("Done.");
 }
 
