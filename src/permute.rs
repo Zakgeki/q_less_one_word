@@ -17,7 +17,8 @@ mod tests {
     }
 }
 
-/// generates permutations form a given vector
+/// Generate permutations of a given vector using 
+/// Heap's algorithm.
 pub fn permute<T: Clone>( mut arr: Vec<T> ) -> Vec<Vec<T>> {
     fn gen_perms<N: Clone>(k: usize, arr: &mut Vec<N>, out: &mut Vec<Vec<N>>) {
         if k == 0 {
