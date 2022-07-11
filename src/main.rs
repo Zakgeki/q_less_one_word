@@ -12,18 +12,18 @@ mod permute;
 use permute::permute;
 
 fn main() {
-    let d00 = [ 'h', 'r', 'n' ];
-    let d01 = [ 'a', 'e', 'o' ];
-    let d02 = [ 'y', 'b', 'l', 'm' ];
-    let d03 = [ 'h', 't', 'p', 'w' ];
-    let d04 = [ 'i', 'n', 'y', 'o' ];
-    let d05 = [ 'l', 'g', 'd', 'r' ];
-    let d06 = [ 'c', 'm', 't', 's' ];
-    let d07 = [ 'c', 'b', 'd', 'j', 't' ];
-    let d08 = [ 'a', 'e', 'i', 'o', 'u' ];
-    let d09 = [ 'd', 'f', 'r', 'l', 'w' ];
-    let d10 = [ 'k', 'v', 'f', 'g', 'p' ];
-    let d11 = [ 's', 'b', 'z', 'x', 'n', 'k' ];
+    let d00 = [ "h", "r", "n" ];
+    let d01 = [ "a", "e", "o" ];
+    let d02 = [ "y", "b", "l", "m" ];
+    let d03 = [ "h", "t", "p", "w" ];
+    let d04 = [ "i", "n", "y", "o" ];
+    let d05 = [ "l", "g", "d", "r" ];
+    let d06 = [ "c", "m", "t", "s" ];
+    let d07 = [ "c", "b", "d", "j", "t" ];
+    let d08 = [ "a", "e", "i", "o", "u" ];
+    let d09 = [ "d", "f", "r", "l", "w" ];
+    let d10 = [ "k", "v", "f", "g", "p" ];
+    let d11 = [ "s", "b", "z", "x", "n", "k" ];
 
     for r00 in d00 {
         for r01 in d01 {
