@@ -25,6 +25,8 @@ fn main() {
     let d10 = [ "k", "v", "f", "g", "p" ];
     let d11 = [ "s", "b", "z", "x", "n", "k" ];
 
+    let mut out = vec![];
+
     for r00 in d00 {
         for r01 in d01 {
             for r02 in d02 {
@@ -42,8 +44,9 @@ fn main() {
                                                         r04, r05, r06, r07,
                                                         r08, r09, r10, r11
                                                     ];
-                                                    let out = format!("{:?}", permute(dice_start_perm));
-                                                    println!("{:?}", out);
+                                                    // let out = format!("{:?}", permute(dice_start_perm));
+                                                    // println!("{:?}", out);
+                                                    out.push(dice_start_perm);
                                                 }
                                             }
                                         }
@@ -64,6 +67,10 @@ fn main() {
     //     "d08", "d09", "d10", /*"d11"*/
     // ]);
     // println!("{:?}, length: {}", perms, perms.len());
+
+    for line in out {
+        println!("{:?}", line);
+    }
     println!("Done.");
 }
 
