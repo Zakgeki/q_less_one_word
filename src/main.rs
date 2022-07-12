@@ -3,13 +3,13 @@
 //
 // eventually this will be multithreaded
 
-// use std::env;
+// for file writing implementation
 // use std::fs;
 // use std::io::Write;
 
-
-mod permute;
-use permute::permute;
+// commented out to avoid a warning
+// mod permute;
+// use permute::permute;
 
 fn main() {
     let d00 = [ "h", "r", "n" ];
@@ -26,7 +26,7 @@ fn main() {
     let d11 = [ "s", "b", "z", "x", "n", "k" ];
 
     let mut out = vec![];
-
+    
     for r00 in d00 {
         for r01 in d01 {
             for r02 in d02 {
@@ -39,14 +39,26 @@ fn main() {
                                         for r09 in d09 {
                                             for r10 in d10 {
                                                 for r11 in d11 {
-                                                    let dice_start_perm = vec![
+                                                    let line = format!(
+                                                        "{}{}{}{}{}{}{}{}{}{}{}{}",
                                                         r00, r01, r02, r03,
                                                         r04, r05, r06, r07,
                                                         r08, r09, r10, r11
-                                                    ];
-                                                    // let out = format!("{:?}", permute(dice_start_perm));
+                                                    );
+
+                                                    out.push(line);
+                                                    
+                                                    // for when I do permutations
+                                                    // let dice_start_perm = vec![
+                                                    //     r00, r01, r02, r03,                                                         r00, r01, r02, r03,
+                                                    //     r04, r05, r06, r07,
+                                                    //     r08, r09, r10, r11
+                                                    // ];
+                                                    //
+                                                    // let temp = format!("{:?}", permute(dice_start_perm));
                                                     // println!("{:?}", out);
-                                                    out.push(dice_start_perm);
+                                                    //
+                                                    // out.push(temp);
                                                 }
                                             }
                                         }
@@ -59,19 +71,20 @@ fn main() {
             }
         }
     }
-
-    // was testing mem depth
-    // let perms = permute(vec![
-    //     "d00", "d01", "d02", "d03",
-    //     "d04", "d05", "d06", "d07",
-    //     "d08", "d09", "d10", /*"d11"*/
-    // ]);
-    // println!("{:?}, length: {}", perms, perms.len());
+    
+    // writing to file instead of printing to a string
+    // weirdly enough, it's much faster to just redirect
+    // in linux
+    //
+    // let mut file = fs::File::create("out.txt").expect("create failed");
+    // for line in out {
+    //     _ = writeln!(file,"{}", line);
+    // }
+    // println!("Done.");
 
     for line in out {
-        println!("{:?}", line);
+        println!("{}", line);
     }
-    println!("Done.");
 }
 
 
