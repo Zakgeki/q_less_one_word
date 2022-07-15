@@ -3,21 +3,21 @@
 //
 // eventually this will be multithreaded
 
-use std::collections::HashMap;
-// for file writing implementation
+
+ 
 use std::fs::File;
 use std::io::BufReader;
-use std::io::{Write, Read};
+use std::io::Read;
+use regex::Regex;
 
 // commented out to avoid a warning
 // mod permute;
 // use permute::permute;
 
-use num::bigint::BigUint;
 use multimap::MultiMap;
 
-fn string_hash(s: String) -> BigUint {
-    let mut product = BigUint::from( 1 as usize );
+fn string_hash(s: String) -> i128  {
+    let mut product = 1;
 
     for c in s.chars() {
         product *= char_hash(c);
@@ -26,39 +26,39 @@ fn string_hash(s: String) -> BigUint {
     product
 }
 
-fn char_hash( c: char ) -> BigUint {
-
+fn char_hash( c: char ) -> i128 {
     match c {
-        'a' => BigUint::from(  2 as usize ),
-        'b' => BigUint::from(  3 as usize ),
-        'c' => BigUint::from(  5 as usize ),
-        'd' => BigUint::from(  7 as usize ),
-        'e' => BigUint::from( 11 as usize ),
-        'f' => BigUint::from( 13 as usize ),
-        'g' => BigUint::from( 17 as usize ),
-        'h' => BigUint::from( 19 as usize ),
-        'i' => BigUint::from( 23 as usize ),
-        'j' => BigUint::from( 29 as usize ),
-        'k' => BigUint::from( 31 as usize ),
-        'l' => BigUint::from( 37 as usize ),
-        'm' => BigUint::from( 41 as usize ),
-        'n' => BigUint::from( 43 as usize ),
-        'o' => BigUint::from( 47 as usize ),
-        'p' => BigUint::from( 53 as usize ),
-        'r' => BigUint::from( 59 as usize ),
-        's' => BigUint::from( 61 as usize ),
-        't' => BigUint::from( 67 as usize ),
-        'u' => BigUint::from( 71 as usize ),
-        'v' => BigUint::from( 73 as usize ),
-        'w' => BigUint::from( 79 as usize ),
-        'x' => BigUint::from( 83 as usize ),
-        'y' => BigUint::from( 89 as usize ),
-        'z' => BigUint::from( 97 as usize ),
-         _  => BigUint::from(  1 as usize )
+        'b' =>  3,
+        'c' =>  5,
+        'd' =>  7,
+        'a' =>  2,
+        'e' => 11,
+        'f' => 13,
+        'g' => 17,
+        'h' => 19,
+        'i' => 23,
+        'j' => 29,
+        'k' => 31,
+        'l' => 37,
+        'm' => 41,
+        'n' => 43,
+        'o' => 47,
+        'p' => 53,
+        'r' => 59,
+        's' => 61,
+        't' => 67,
+        'u' => 71,
+        'v' => 73,
+        'w' => 79,
+        'x' => 83,
+        'y' => 89,
+        'z' => 97,
+         _  =>  1
     }
 }
 
 fn main() {
+    // dice to roll (duplicates on each die have been removed)
     const D00: [ char; 3 ] = [ 'h', 'r', 'n' ];
     const D01: [ char; 3 ] = [ 'a', 'e', 'o' ];
     const D02: [ char; 4 ] = [ 'y', 'b', 'l', 'm' ];
@@ -72,34 +72,28 @@ fn main() {
     const D10: [ char; 5 ] = [ 'k', 'v', 'f', 'g', 'p' ];
     const D11: [ char; 6 ] = [ 's', 'b', 'z', 'x', 'n', 'k' ];
 
-    // let mut out = vec![];
-
+    // load in the text file to go through
     let file = File::open("words2ElectricBoogaloo.txt").unwrap();
     let mut file_buffer = BufReader::new(file);
     let mut contents = String::new();
     file_buffer.read_to_string(&mut contents).expect("Unable to read string");
     
-    // let mut data = vec![];
-
+    // filter out any for strings of vowels since the dice only allow 3 at a time
+    // (significantly narrows the search space)
+    let vowel_filt = Regex::new(r"[aoeui].*[aoeui].*[aoeui].*[aoeui].*").unwrap();
+    let filtered_contents = contents.lines()
+                                    .filter(|line| !vowel_filt.is_match(line));
+    
+    // create the hashmap for the filtered file contents
     let mut data_map = MultiMap::new();
 
-    for line in contents.split("\n") {
-        data_map.insert(string_hash(line.to_string()), line.to_string() );
-        // println!("hash: {}", string_hash((line.to_string())));
+    for line in filtered_contents {
+        data_map.insert(string_hash(line.trim().to_string()), line.to_string() );
     }
 
-    // for (key, values) in data_map.iter_all() {
-    //     for line in values {
-    //         assert_eq!(&string_hash(line.to_string()), key);
-    //     }
-    // }
+    // "roll" each die and calculate its hash
+    let mut out: Vec<&String> = vec![];
 
-    // for line in data {
-    //     println!("{}", line);
-    // }
-
-
-    let mut out = vec![];
     for r00 in D00 {
         let hash00 = char_hash( r00 );
        
@@ -135,13 +129,15 @@ fn main() {
 
                                                 for r11 in D11 {
                                                     let hash11 = &hash10 * char_hash( r11 );
-                                                    if data_map.contains_key(&hash11) {
+
+                                                    // check if the rolled hash is in the map and check if it's not in 
+                                                    // the output vector. If true, then add it to the output vector
+                                                    if data_map.contains_key(&hash11) && !out.contains(&data_map.get(&hash11).unwrap()) {
                                                         
-                                                       let entry = data_map.get_vec(&hash11).unwrap(); 
-                                                            for word in entry {
-                                                                out.push(word);
-                                                            }
-                                                       }
+                                                        let entry = data_map.get_vec(&hash11).unwrap(); 
+                                                        for word in entry {
+                                                            out.push(word);
+                                                        }
                                                     }
 
                                                     
@@ -177,26 +173,12 @@ fn main() {
         }
     }
 
-   out.sort();
-   out.dedup();
+    // sort and print the results
+    out.sort();
 
-   for word in out {
-        println!("{}", line);
-   }
-    
-    // writing to file instead of printing to a string
-    // weirdly enough, it's much faster to just redirect
-    // in linux
-    //
-    // let mut file = fs::File::create("out.txt").expect("create failed");
-    // for line in out {
-    //     _ = writeln!(file,"{}", line);
-    // }
-    // println!("Done.");
-
-    // for line in out {
-    //     println!("{}", line);
-    // }
+    for word in out {
+        print!("{}\n", word);
+    }
 }
 
 
