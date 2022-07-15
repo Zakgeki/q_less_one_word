@@ -99,7 +99,7 @@ fn main() {
     // }
 
 
-    let mut out = HashMap::new();
+    let mut out = vec![];
     for r00 in D00 {
         let hash00 = char_hash( r00 );
        
@@ -137,11 +137,9 @@ fn main() {
                                                     let hash11 = &hash10 * char_hash( r11 );
                                                     if data_map.contains_key(&hash11) {
                                                         
-                                                       let temp = data_map.get_vec(&hash11); 
-                                                       for vector in temp {
-                                                            for line in vector {
-
-                                                                out.insert(line, line);
+                                                       let entry = data_map.get_vec(&hash11).unwrap(); 
+                                                            for word in entry {
+                                                                out.push(word);
                                                             }
                                                        }
                                                     }
@@ -179,14 +177,10 @@ fn main() {
         }
     }
 
-    let mut final_list = vec![];
-   for (_, val) in out.iter() {
-        final_list.push( val );
-   } 
+   out.sort();
+   out.dedup();
 
-   final_list.sort();
-
-   for line in final_list {
+   for word in out {
         println!("{}", line);
    }
     
