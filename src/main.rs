@@ -3,23 +3,24 @@
 //
 // eventually this will be multithreaded
 
+use std::collections::HashMap;
 // for file writing implementation
-// use std::fs;
-// use std::io::Write;
+use std::fs::File;
+use std::io::BufReader;
+use std::io::{Write, Read};
 
 // commented out to avoid a warning
 // mod permute;
 // use permute::permute;
 
 use num::bigint::BigUint;
-// use multimap::MultiMap;
+use multimap::MultiMap;
 
 fn string_hash(s: String) -> BigUint {
     let mut product = BigUint::from( 1 as usize );
-    println!("{}",s);
+
     for c in s.chars() {
         product *= char_hash(c);
-        // println!("{}", char_hash(c));
     }
 
     product
@@ -28,32 +29,32 @@ fn string_hash(s: String) -> BigUint {
 fn char_hash( c: char ) -> BigUint {
 
     match c {
-        'a' => { println!("{}",  2 ); BigUint::from(  2 as usize )},
-        'b' => { println!("{}",  3 ); BigUint::from(  3 as usize )},
-        'c' => { println!("{}",  5 ); BigUint::from(  5 as usize )},
-        'd' => { println!("{}",  7 ); BigUint::from(  7 as usize )},
-        'e' => { println!("{}", 11 ); BigUint::from( 11 as usize )},
-        'f' => { println!("{}", 13 ); BigUint::from( 13 as usize )},
-        'g' => { println!("{}", 17 ); BigUint::from( 17 as usize )},
-        'h' => { println!("{}", 19 ); BigUint::from( 19 as usize )},
-        'i' => { println!("{}", 23 ); BigUint::from( 23 as usize )},
-        'j' => { println!("{}", 29 ); BigUint::from( 29 as usize )},
-        'k' => { println!("{}", 31 ); BigUint::from( 31 as usize )},
-        'l' => { println!("{}", 37 ); BigUint::from( 37 as usize )},
-        'm' => { println!("{}", 41 ); BigUint::from( 41 as usize )},
-        'n' => { println!("{}", 43 ); BigUint::from( 43 as usize )},
-        'o' => { println!("{}", 47 ); BigUint::from( 47 as usize )},
-        'p' => { println!("{}", 53 ); BigUint::from( 53 as usize )},
-        'r' => { println!("{}", 59 ); BigUint::from( 59 as usize )},
-        's' => { println!("{}", 61 ); BigUint::from( 61 as usize )},
-        't' => { println!("{}", 67 ); BigUint::from( 67 as usize )},
-        'u' => { println!("{}", 71 ); BigUint::from( 71 as usize )},
-        'v' => { println!("{}", 73 ); BigUint::from( 73 as usize )},
-        'w' => { println!("{}", 79 ); BigUint::from( 79 as usize )},
-        'x' => { println!("{}", 83 ); BigUint::from( 83 as usize )},
-        'y' => { println!("{}", 89 ); BigUint::from( 89 as usize )},
-        'z' => { println!("{}", 97 ); BigUint::from( 97 as usize )},
-         _  => BigUint::from(  0 as usize )
+        'a' => BigUint::from(  2 as usize ),
+        'b' => BigUint::from(  3 as usize ),
+        'c' => BigUint::from(  5 as usize ),
+        'd' => BigUint::from(  7 as usize ),
+        'e' => BigUint::from( 11 as usize ),
+        'f' => BigUint::from( 13 as usize ),
+        'g' => BigUint::from( 17 as usize ),
+        'h' => BigUint::from( 19 as usize ),
+        'i' => BigUint::from( 23 as usize ),
+        'j' => BigUint::from( 29 as usize ),
+        'k' => BigUint::from( 31 as usize ),
+        'l' => BigUint::from( 37 as usize ),
+        'm' => BigUint::from( 41 as usize ),
+        'n' => BigUint::from( 43 as usize ),
+        'o' => BigUint::from( 47 as usize ),
+        'p' => BigUint::from( 53 as usize ),
+        'r' => BigUint::from( 59 as usize ),
+        's' => BigUint::from( 61 as usize ),
+        't' => BigUint::from( 67 as usize ),
+        'u' => BigUint::from( 71 as usize ),
+        'v' => BigUint::from( 73 as usize ),
+        'w' => BigUint::from( 79 as usize ),
+        'x' => BigUint::from( 83 as usize ),
+        'y' => BigUint::from( 89 as usize ),
+        'z' => BigUint::from( 97 as usize ),
+         _  => BigUint::from(  1 as usize )
     }
 }
 
@@ -73,51 +74,87 @@ fn main() {
 
     // let mut out = vec![];
 
+    let file = File::open("words2ElectricBoogaloo.txt").unwrap();
+    let mut file_buffer = BufReader::new(file);
+    let mut contents = String::new();
+    file_buffer.read_to_string(&mut contents).expect("Unable to read string");
+    
+    // let mut data = vec![];
+
+    let mut data_map = MultiMap::new();
+
+    for line in contents.split("\n") {
+        data_map.insert(string_hash(line.to_string()), line.to_string() );
+        // println!("hash: {}", string_hash((line.to_string())));
+    }
+
+    // for (key, values) in data_map.iter_all() {
+    //     for line in values {
+    //         assert_eq!(&string_hash(line.to_string()), key);
+    //     }
+    // }
+
+    // for line in data {
+    //     println!("{}", line);
+    // }
+
+
+    let mut out = HashMap::new();
     for r00 in D00 {
         let hash00 = char_hash( r00 );
        
         for r01 in D01 {
-            let hash01 = hash00.clone() * char_hash( r01 );
+            let hash01 = &hash00 * char_hash( r01 );
 
             for r02 in D02 {
-                let hash02 = hash01.clone() * char_hash( r02 );
+                let hash02 = &hash01 * char_hash( r02 );
 
                 for r03 in D03 {
-                    let hash03 = hash02.clone() * char_hash( r03 );
+                    let hash03 = &hash02 * char_hash( r03 );
 
                     for r04 in D04 {
-                        let hash04 = hash03.clone() * char_hash( r04 );
+                        let hash04 = &hash03 * char_hash( r04 );
 
                         for r05 in D05 {
-                            let hash05 = hash04.clone() * char_hash( r05 );
+                            let hash05 = &hash04 * char_hash( r05 );
 
                             for r06 in D06 {
-                                let hash06 = hash05.clone() * char_hash( r06 );
+                                let hash06 = &hash05 * char_hash( r06 );
 
                                 for r07 in D07 {
-                                    let hash07 = hash06.clone() * char_hash( r07 );
+                                    let hash07 = &hash06 * char_hash( r07 );
 
                                     for r08 in D08 {
-                                        let hash08 = hash07.clone() * char_hash( r08 );
+                                        let hash08 = &hash07 * char_hash( r08 );
 
                                         for r09 in D09 {
-                                            let hash09 = hash08.clone() * char_hash( r09 );
+                                            let hash09 = &hash08 * char_hash( r09 );
 
                                             for r10 in D10 {
-                                                let hash10 = hash09.clone() * char_hash( r10 );
+                                                let hash10 = &hash09 * char_hash( r10 );
 
                                                 for r11 in D11 {
-                                                    let hash11 = hash10.clone() * char_hash( r11 );
-                                                    println!("{}", hash11); 
-                                                    let hash = string_hash(format!(
-                                                        "{}{}{}{}{}{}{}{}{}{}{}{}",
-                                                        r00, r01, r02, r03,                                                         r00, r01, r02, r03,
-                                                        r04, r05, r06, r07,
-                                                        r08, r09, r10, r11
-                                                    ));
-                                                    println!("{}", hash);
+                                                    let hash11 = &hash10 * char_hash( r11 );
+                                                    if data_map.contains_key(&hash11) {
+                                                        
+                                                       let temp = data_map.get_vec(&hash11); 
+                                                       for vector in temp {
+                                                            for line in vector {
+
+                                                                out.insert(line, line);
+                                                            }
+                                                       }
+                                                    }
+
                                                     
-                                                    assert_eq!(hash11, hash);
+                                                    // let temp = format!( "{}{}{}{}{}{}{}{}{}{}{}{}",
+                                                    //     r00, r01, r02, r03,
+                                                    //     r04, r05, r06, r07,
+                                                    //     r08, r09, r10, r11
+                                                    // );
+                                                    // let hash = string_hash(temp);
+                                                    
+                                                    // assert_eq!(hash11, hash);
                                                     // for when I do permutations
                                                     // let dice_start_perm = vec![
                                                     //     r00, r01, r02, r03,                                                         r00, r01, r02, r03,
@@ -141,6 +178,17 @@ fn main() {
             }
         }
     }
+
+    let mut final_list = vec![];
+   for (_, val) in out.iter() {
+        final_list.push( val );
+   } 
+
+   final_list.sort();
+
+   for line in final_list {
+        println!("{}", line);
+   }
     
     // writing to file instead of printing to a string
     // weirdly enough, it's much faster to just redirect
